@@ -1,4 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui>
-	<HxComponent></HxComponent>
+	<Component>
+		<id>TeppoButton</id>
+		<type>com.studfarm.hxuikit.components.HxButton</type>
+		<skin>skins.ButtonSkin</skin>
+		<label>Teppo</label>
+		<labelFont>assets/hxuikit/Impact.ttf</labelFont>
+		<x>0.5</x>
+		<y>0.5</y>
+		<labelColor>ffffff</labelColor>
+		<fontSize>20</fontSize>
+	</Component>
+	
+	<Component>
+		<id>SuperTeppoButton</id>
+		<type>com.studfarm.hxuikit.components.HxButton</type>
+		<skin>skins.ButtonSkin</skin>
+		<label>SuperTeppo</label>
+		<labelFont>assets/hxuikit/Impact.ttf</labelFont>
+		<x>0.2</x>
+		<y>0.2</y>
+		<labelColor>ffffff</labelColor>
+		<fontSize>20</fontSize>
+	</Component>
 </ui>

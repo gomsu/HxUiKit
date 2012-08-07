@@ -19,6 +19,7 @@
 	<icon name="assets/nme.svg" />
 
 	<assets path="assets" include="*" exclude="nme.svg" />
+	<assets path="assets/hxuikit" include="*" />
 	<library path="assets/hxuikit/skin.swf" rename="assets_hxuikit_skin_swf.swf" />
 	
 	<ndll name="std" />

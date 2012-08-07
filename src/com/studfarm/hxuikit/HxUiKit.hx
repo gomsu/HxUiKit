@@ -8,6 +8,10 @@ import nme.net.URLRequest;
 import nme.net.URLLoader;
 import nme.errors.Error;
 import nme.events.MouseEvent;
+import haxe.xml.Fast;
+
+import com.studfarm.hxuikit.components.HxButton;
+import flash.display.DisplayObject;
 
 class HxUiKit {
 	
@@ -20,6 +24,7 @@ class HxUiKit {
 	private var _skinFileName:String;
 	private var _definitionLoader:URLLoader;
 	private var _uiDefinitionName:String;
+	private var _fastXml:Fast;
 	
 	public function new (uiDefinition:String, skinFile:String) {
 		if (uiDefinition == null)
@@ -32,11 +37,7 @@ class HxUiKit {
 		
 		loadDefinition();
 	}
-	
-	private function onClick (evt:MouseEvent) : Void {
-		trace("bällä");
-	}
-	
+
 	private function loadDefinition () : Void {
 		_definitionLoader = new URLLoader();
 		_definitionLoader.addEventListener(Event.COMPLETE, onDefinitionLoaded);
@@ -46,7 +47,36 @@ class HxUiKit {
 	
 	private function onDefinitionLoaded (evt:Event) {
 		trace(LOG_PREFIX + "UI definition loaded");
+		
+		var xml:Dynamic = Xml.parse(_definitionLoader.data);
+		_fastXml = new Fast(xml.firstElement());
+		iterateElement(_fastXml);
+
 		loadTheme();
+	}
+	
+	private function iterateElement (element:Fast) {
+		for (e in element.elements) {
+			switch (e.name) {
+				case "Component":
+					var properties = getProperties(e);
+					var cmp:DisplayObject = Type.createInstance(Type.resolveClass(properties.get("type")), [properties]);
+					cmp.x = nme.Lib.current.stage.stageWidth * Std.parseFloat(properties.get("x"));
+					cmp.y = nme.Lib.current.stage.stageHeight * Std.parseFloat(properties.get("y"));
+					nme.Lib.current.addChild(cmp);
+			}
+		}
+	}
+	
+	private function getProperties (element:Fast) : Dynamic {
+		var ret = new Hash<String>();
+		
+		for (e in element.elements) {
+			trace(e.name + ":" + e.innerData);
+			ret.set(e.name, e.innerData);
+		}
+		
+		return ret;
 	}
 	
 	private function onDefinitionLoadError (evt:Event) {

@@ -2,26 +2,38 @@ package com.studfarm.hxuikit.components;
 
 import com.studfarm.hxuikit.HxUiKit;
 import nme.events.MouseEvent;
-import flash.events.Event;
-import flash.events.MouseEvent;
-import flash.events.IOErrorEvent;
+import nme.events.Event;
+import nme.events.MouseEvent;
+import nme.events.IOErrorEvent;
 import skins.ButtonSkin;
+
+import nme.Assets;
 
 
 class HxButton extends HxComponent {
 	inline public static var CLICK:String = "buttonClick";
 	
 	private var _asset:Dynamic;
+	private var _label:HxLabel;
 	
-	public function new () {
-		super();
+	public function new (params:Dynamic) {
+		super(params);
 		init();
 	}
 	
-	private function init () {
-		_asset = Type.createInstance(Type.resolveClass("skins.ButtonSkin"), []);
+	override public function init () {
+		super.init();
+		
+		_asset = Type.createInstance(Type.resolveClass( getParameters().get("skin")), []);
 		_asset.stop();
+		
+		getParameters().set("width", _asset.width);
+		getParameters().set("height", _asset.height);
+		
+		_label = new HxLabel(getParameters());
+		
 		addChild(_asset);
+		addChild(_label);
 		
 		addEventListener(MouseEvent.CLICK, onClick);
 		addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
