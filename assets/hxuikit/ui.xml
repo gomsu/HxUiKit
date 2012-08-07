@@ -20,7 +20,7 @@
 		<labelFont>assets/hxuikit/Impact.ttf</labelFont>
 		<x>0.2</x>
 		<y>0.2</y>
-		<labelColor>ffffff</labelColor>
-		<fontSize>20</fontSize>
+		<labelColor>00ffff</labelColor>
+		<fontSize>15</fontSize>
 	</Component>
 </ui>

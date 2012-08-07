@@ -24,7 +24,7 @@ class HxButton extends HxComponent {
 	override public function init () {
 		super.init();
 		
-		_asset = Type.createInstance(Type.resolveClass( getParameters().get("skin")), []);
+		_asset = Type.createInstance(Type.resolveClass(getParameters().get("skin")), []);
 		_asset.stop();
 		
 		getParameters().set("width", _asset.width);

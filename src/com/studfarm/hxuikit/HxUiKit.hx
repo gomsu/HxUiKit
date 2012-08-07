@@ -9,6 +9,7 @@ import nme.net.URLLoader;
 import nme.errors.Error;
 import nme.events.MouseEvent;
 import haxe.xml.Fast;
+import com.studfarm.hxuikit.components.HxComponent;
 
 import com.studfarm.hxuikit.components.HxButton;
 import flash.display.DisplayObject;
@@ -25,6 +26,7 @@ class HxUiKit {
 	private var _definitionLoader:URLLoader;
 	private var _uiDefinitionName:String;
 	private var _fastXml:Fast;
+	private var _components:Array<HxComponent>;
 	
 	public function new (uiDefinition:String, skinFile:String) {
 		if (uiDefinition == null)
@@ -34,8 +36,18 @@ class HxUiKit {
 		
 		_uiDefinitionName = uiDefinition;
 		_skinFileName = skinFile;
+		_components = new Array<HxComponent>();
 		
 		loadDefinition();
+	}
+
+	public function getComponentById (id:String) : HxComponent {
+		for (component in _components) {
+			if (component.getParameters().get("id") == id)
+				return component; 
+		}
+		
+		return null;
 	}
 
 	private function loadDefinition () : Void {
@@ -50,8 +62,8 @@ class HxUiKit {
 		
 		var xml:Dynamic = Xml.parse(_definitionLoader.data);
 		_fastXml = new Fast(xml.firstElement());
+		
 		iterateElement(_fastXml);
-
 		loadTheme();
 	}
 	
@@ -60,9 +72,14 @@ class HxUiKit {
 			switch (e.name) {
 				case "Component":
 					var properties = getProperties(e);
-					var cmp:DisplayObject = Type.createInstance(Type.resolveClass(properties.get("type")), [properties]);
+					var cmp:HxComponent = Type.createInstance(Type.resolveClass(properties.get("type")), [properties]);
+					_components.push(cmp);
+					
+					// TODO: Do not calculate coords for component here.
 					cmp.x = nme.Lib.current.stage.stageWidth * Std.parseFloat(properties.get("x"));
 					cmp.y = nme.Lib.current.stage.stageHeight * Std.parseFloat(properties.get("y"));
+					
+					//ÊTODO: Do not insert to displaylist like this.
 					nme.Lib.current.addChild(cmp);
 			}
 		}
@@ -71,10 +88,8 @@ class HxUiKit {
 	private function getProperties (element:Fast) : Dynamic {
 		var ret = new Hash<String>();
 		
-		for (e in element.elements) {
-			trace(e.name + ":" + e.innerData);
+		for (e in element.elements)
 			ret.set(e.name, e.innerData);
-		}
 		
 		return ret;
 	}

@@ -1,9 +1,9 @@
 package com.studfarm.hxuikit;
 
 import nme.display.MovieClip;
-//import com.studfarm.hxuikit.components.HxButton;
 import com.studfarm.hxuikit.HxUiKit;
 import flash.events.Event;
+import com.studfarm.hxuikit.components.HxButton;
 
 class Main {	
 	
@@ -15,9 +15,7 @@ class Main {
 	public function new() {
 		_main = nme.Lib.current;
 		_uikit = new HxUiKit(null, null);
-		//_testButton = new HxButton();
-		//_testButton.addEventListener(HxButton.CLICK, testSomething);
-		//_main.addChild(_testButton);
+		_uikit.getComponentById("TeppoButton").addEventListener(HxButton.CLICK, testSomething);
 	}
 	
 	private function testSomething (evt:Event) {

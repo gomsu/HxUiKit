@@ -21,14 +21,14 @@ class HxLabel extends HxComponent {
 		var font:Font = Assets.getFont(getParameters().get("labelFont"));
 		var targetTextField:TextField = new TextField();
 		var targetTF:TextFormat = new TextFormat(font.fontName);
-		
+
 		targetTextField.defaultTextFormat = targetTF;
-		targetTextField.embedFonts = true;
-		//targetTextField.htmlText = "<font color=\"#" + getParameters().get("labelColor") + "\" size=\"" + getParameters().get("fontSize") + "\">moi</font>";
 		targetTextField.htmlText = "<font color=\"#" + getParameters().get("labelColor") + "\" size=\"" + getParameters().get("fontSize") + "\">" + getParameters().get("label") + "</font>";
-		targetTextField.selectable = false;
 		targetTextField.width = getParameters().get("width");
 		targetTextField.height = getParameters().get("height");
+		
+		targetTextField.embedFonts = true;
+		targetTextField.selectable = false;
 		targetTextField.mouseEnabled = false;
 		
 		addChild(targetTextField);
