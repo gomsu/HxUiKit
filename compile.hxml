@@ -1,0 +1,5 @@
+-swf-version 10
+-swf bin/flash/Main.swf
+-main com.studfarm.hxuikit.Main
+-cp src
+-lib nme
