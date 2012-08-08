@@ -70,7 +70,7 @@ class HxComponent extends Sprite {
 			if (!_parameters.exists("stretch_horizontal"))
 				left = right - _originalDimensions.x;
 		}
-		else
+		else if (!_parameters.exists("anchor_left"))
 			right = _asset.parent.width * ((_originalCoordinates.x + _originalDimensions.x) / parent.getOriginalDimensions().x);
 		
 		
@@ -96,7 +96,7 @@ class HxComponent extends Sprite {
 			if (!_parameters.exists("stretch_vertical"))
 				top = bottom - _originalDimensions.y;			
 		}
-		else
+		else if (!_parameters.exists("anchor_top"))
 			bottom = _asset.parent.height * ((_originalCoordinates.y + _originalDimensions.y) / parent.getOriginalDimensions().y);
 
 
