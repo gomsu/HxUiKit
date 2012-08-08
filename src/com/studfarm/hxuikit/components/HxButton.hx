@@ -5,15 +5,12 @@ import nme.events.MouseEvent;
 import nme.events.Event;
 import nme.events.MouseEvent;
 import nme.events.IOErrorEvent;
-import skins.ButtonSkin;
 
 import nme.Assets;
 
-
 class HxButton extends HxComponent {
 	inline public static var CLICK:String = "buttonClick";
-	
-	private var _asset:Dynamic;
+		
 	private var _label:HxLabel;
 	
 	public function new (params:Dynamic) {
@@ -24,22 +21,17 @@ class HxButton extends HxComponent {
 	override public function init () {
 		super.init();
 		
-		_asset = Type.createInstance(Type.resolveClass(getParameters().get("skin")), []);
-		_asset.stop();
+		_parameters.set("width", _asset.width);
+		_parameters.set("height", _asset.height);
 		
-		getParameters().set("width", _asset.width);
-		getParameters().set("height", _asset.height);
+		_label = new HxLabel(_parameters);
 		
-		_label = new HxLabel(getParameters());
-		
-		addChild(_asset);
-		addChild(_label);
-		
-		addEventListener(MouseEvent.CLICK, onClick);
-		addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-		addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
-		addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
-		addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
+		_asset.addChild(_label);
+		_asset.addEventListener(MouseEvent.CLICK, onClick);
+		_asset.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+		_asset.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+		_asset.addEventListener(MouseEvent.MOUSE_UP, onMouseUp);
+		_asset.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 	}
 	
 	private function onMouseOver (evt:MouseEvent) : Void {
@@ -47,18 +39,23 @@ class HxButton extends HxComponent {
 			_asset.gotoAndStop(3);
 		else
 			_asset.gotoAndStop(2);
+			
+		_asset.addChild(_label);
 	}
 
 	private function onMouseOut (evt:MouseEvent) : Void {
 		_asset.gotoAndStop(1);
+		_asset.addChild(_label);
 	}
 
 	private function onMouseUp (evt:MouseEvent) : Void {
 		_asset.gotoAndStop(2);
+		_asset.addChild(_label);
 	}
 
 	private function onMouseDown (evt:MouseEvent) : Void {
 		_asset.gotoAndStop(3);
+		_asset.addChild(_label);
 	}
 	
 	private function onClick (evt:MouseEvent) : Void {
