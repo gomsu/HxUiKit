@@ -9,6 +9,7 @@ class HxLabel extends HxComponent {
 	
 	private var _labelWidth:Int;
 	private var _labelHeight:Int;
+	private var _tf:TextField;
 	
 	public function new (params:Dynamic) {
 		super(params);
@@ -19,20 +20,25 @@ class HxLabel extends HxComponent {
 		super.init();
 		
 		var font:Font = Assets.getFont(_parameters.get("labelFont"));
-		var targetTextField:TextField = new TextField();
 		var targetTF:TextFormat = new TextFormat(font.fontName);
+		_tf = new TextField();
 
-		targetTextField.defaultTextFormat = targetTF;
-		targetTextField.htmlText = "<font color=\"#" + _parameters.get("labelColor") + "\" size=\"" + _parameters.get("fontSize") + "\">" + _parameters.get("label") + "</font>";
-		targetTextField.width = _parameters.get("width");
-		targetTextField.height = _parameters.get("height");
+		_tf.defaultTextFormat = targetTF;
+		_tf.htmlText = "<font color=\"#" + _parameters.get("labelColor") + "\" size=\"" + _parameters.get("fontSize") + "\">" + _parameters.get("label") + "</font>";
+		_tf.width = _parameters.get("width");
+		_tf.height = _parameters.get("height");
 		
-		targetTextField.embedFonts = true;
-		targetTextField.selectable = false;
-		targetTextField.mouseEnabled = false;
+		_tf.embedFonts = true;
+		_tf.selectable = false;
+		_tf.mouseEnabled = false;
 		
-		addChild(targetTextField);
+		addChild(_tf);
 		
 		mouseEnabled = false;
+	}
+	
+	override public function resize () {
+		_tf.width = _parameters.get("width");
+		_tf.height = _parameters.get("height");		
 	}
 }

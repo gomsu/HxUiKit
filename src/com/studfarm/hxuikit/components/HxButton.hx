@@ -39,8 +39,11 @@ class HxButton extends HxComponent {
 		super.resize();
 		_asset.getChildByName("background").width = _currentRect.width;
 		_asset.getChildByName("background").height = _currentRect.height;
-		_parameters.set("width", _asset.width);
-		_parameters.set("height", _asset.height);
+		_parameters.set("width", _currentRect.width);
+		_parameters.set("height", _currentRect.height);
+		_label.getParameters().set("width", _currentRect.width);
+		_label.getParameters().set("height", _currentRect.height);
+		_label.resize();
 	}
 	
 	private function onMouseOver (evt:MouseEvent) : Void {
