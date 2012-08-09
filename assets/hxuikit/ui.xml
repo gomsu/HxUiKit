@@ -2,7 +2,7 @@
 <ui>
 	<Component>
 		<id>MainContainer</id>
-		<target>MainLayout.background</target>
+		<target>MainLayout.maincontainer</target>
 		<type>com.studfarm.hxuikit.components.HxContainer</type>
 		<stretch>vertical,horizontal</stretch>
 		<anchor>left,right,top,bottom</anchor>

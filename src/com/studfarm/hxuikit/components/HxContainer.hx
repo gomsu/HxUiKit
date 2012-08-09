@@ -29,7 +29,7 @@ class HxContainer extends HxComponent {
 			_asset.height = nme.Lib.current.stage.stageHeight;
 		}*/
 		
-		_asset.width = getCurrentDimensions().width;
-		_asset.height = getCurrentDimensions().height;		
+		_asset.getChildByName("background").width = getCurrentDimensions().width;
+		_asset.getChildByName("background").height = getCurrentDimensions().height;		
 	}
 }
