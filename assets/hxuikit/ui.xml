@@ -13,7 +13,7 @@
 		<parent>MainContainer</parent>
 		<target>MainLayout.button1</target>
 		<type>com.studfarm.hxuikit.components.HxButton</type>
-		<label>Teppo</label>
+		<label>Teppo on kova</label>
 		<labelFont>assets/hxuikit/Impact.ttf</labelFont>
 		<x>0.5</x>
 		<y>0.5</y>
@@ -27,12 +27,13 @@
 		<parent>MainContainer</parent>
 		<target>MainLayout.button2</target>
 		<type>com.studfarm.hxuikit.components.HxButton</type>
-		<label>SuperTeppo</label>
+		<label>SuperTeppo ostaa mopedin ehka huomenna moi moi moi</label>
 		<labelFont>assets/hxuikit/Impact.ttf</labelFont>
 		<x>0.2</x>
 		<y>0.2</y>
 		<labelColor>00ffff</labelColor>
 		<fontSize>15</fontSize>
-		<anchor>right,bottom</anchor>
+		<stretch>horizontal</stretch>
+		<anchor>left,right,bottom</anchor>
 	</Component>
 </ui>

@@ -2,17 +2,16 @@ package com.studfarm.hxuikit.components;
 
 import nme.display.Sprite;
 import nme.geom.Point;
+import nme.geom.Point;
+import nme.geom.Rectangle;
+
 import com.studfarm.hxuikit.HxUiKit;
 
 class HxComponent extends Sprite {
 	
-	// 0..1
-	private var _originalPosition:Point;
-	// 0..N
-	private var _originalCoordinates:Point;
-	private var _originalDimensions:Point;
-	private var _currentPosition:Point;
-	private var _currentDimensions:Point;
+	private var _originalCaps:Point;
+	private var _originalRect:Rectangle;
+	private var _currentRect:Rectangle;
 	private var _parameters:Dynamic;
 	private var _asset:Dynamic;
 	
@@ -24,101 +23,106 @@ class HxComponent extends Sprite {
 	public function init () {
 		if (_parameters.exists("target")) {
 			_asset = HxUiKit.getLayoutElementByName(_parameters.get("target"));
-			_asset.stop();
-			var posx:Float = _asset.x / _asset.parent.width;
-			var posy:Float = _asset.y / _asset.parent.height;
-			
-			_originalPosition = new Point(posx, posy);
-			_originalCoordinates = new Point(_asset.x, _asset.y);
-			_originalDimensions = new Point(_asset.width, _asset.height);
-			_currentPosition = _originalPosition;
-			_currentDimensions = _originalDimensions;
+			_asset.stop();			
+			_originalRect = new Rectangle(_asset.x, _asset.y, _asset.width, _asset.height);
+			_currentRect = new Rectangle(_originalRect.x, _originalRect.y, _originalRect.width, _originalRect.height);
+			_originalCaps = new Point(_asset.width, _asset.height);
+			var parent:HxComponent = getParent();
+			if (parent != null)
+				_originalCaps = new Point(parent.getOriginalDimensions().width, parent.getOriginalDimensions().height);
 		}
 	}
 	
 	public function resize() {
-		//trace("resize: " + _parameters.get("id"));
 		var left:Float = 0;
 		var right:Float = 0;
 		var top:Float = 0;
 		var bottom:Float = 0;
-		var layoutOrigDimensions:Point = HxUiKit.getLayoutPropertiesByName(_parameters.get("target").split(".")[0]).get("dimensions");
+		var center:Float = 0;
+		
 		var parent:HxComponent = getParent();
-		
-		// TODO: Unsafe!
-		if (parent == null)
-			parent = this;
-		
-		// Left
-		if (_parameters.exists("anchor_left"))
-			left = _originalCoordinates.x;
-			if (!_parameters.exists("stretch_horizontal"))
-				right = left + _originalDimensions.x;			
-		else
-			left = _asset.parent.width * _originalPosition.x;
-		
-		
-		// Right
-		if (_parameters.exists("anchor_right")) {
-			var parentCurrentWidth = parent.getCurrentDimensions().x;
-			
-			if (parent == this)
-				parentCurrentWidth = nme.Lib.current.stage.stageWidth;
-				
-			right = parentCurrentWidth - (parent.getOriginalDimensions().x - (_originalCoordinates.x + _originalDimensions.x));
-			
-			if (!_parameters.exists("stretch_horizontal"))
-				left = right - _originalDimensions.x;
-		}
-		else if (!_parameters.exists("anchor_left"))
-			right = _asset.parent.width * ((_originalCoordinates.x + _originalDimensions.x) / parent.getOriginalDimensions().x);
-		
-		
-		// Top
-		if (_parameters.exists("anchor_top")) {			
-			top = _originalCoordinates.y;
-			if (!_parameters.exists("stretch_vertical"))				
-				bottom = top + _originalDimensions.y;
-		}
-		else
-			top = _asset.parent.height * _originalPosition.y;	
-		
-		
-		// Bottom
-		if (_parameters.exists("anchor_bottom")) {			
-			var parentCurrentHeight = parent.getCurrentDimensions().y;
-			
-			if (parent == this)
-				parentCurrentHeight = nme.Lib.current.stage.stageHeight;
-			
-			bottom = parentCurrentHeight - (parent.getOriginalDimensions().y - (_originalCoordinates.y + _originalDimensions.y));
-			
-			if (!_parameters.exists("stretch_vertical"))
-				top = bottom - _originalDimensions.y;			
-		}
-		else if (!_parameters.exists("anchor_top"))
-			bottom = _asset.parent.height * ((_originalCoordinates.y + _originalDimensions.y) / parent.getOriginalDimensions().y);
+		var caps:Point = new Point(nme.Lib.current.stage.stageWidth, nme.Lib.current.stage.stageHeight);
 
-
-			
-		trace(left + ", " + right + ", " + top + ", " + bottom);
+		var anchorLeftValue:Int = _parameters.exists("anchor_left") ? 0 : -1;
+		var anchorRightValue:Int = _parameters.exists("anchor_right") && (!_parameters.exists("anchor_left") || _parameters.exists("stretch_horizontal")) ? 1 : -1;
+		var anchorTopValue:Int = _parameters.exists("anchor_top") ? 0 : -1;
+		var anchorBottomValue:Int = _parameters.exists("anchor_bottom") && (!_parameters.exists("anchor_top") || _parameters.exists("stretch_vertical")) ? 1 : -1;
+		var anchors:Rectangle = new Rectangle(anchorLeftValue, anchorTopValue, anchorRightValue, anchorBottomValue);
 		
-		_currentPosition = new Point(left, top);
-		_currentDimensions = new Point(right - left, bottom - top);
-		_asset.x = _currentPosition.x;
-		_asset.y = _currentPosition.y;		
+		if (parent != null)
+			caps = new Point(parent.getCurrentDimensions().width, parent.getCurrentDimensions().height);
+			
+		left = calcPointPosOnLine(caps.x, _originalCaps.x, _originalRect.x, cast(anchors.x, Int));
+		right = calcPointPosOnLine(caps.x, _originalCaps.x, _originalRect.x + _originalRect.width, cast(anchors.width, Int));
+		
+		if (!_parameters.exists("stretch_horizontal")) {
+			var values:Array<Float> = calcMinMax(caps.x, _originalCaps.x, _originalRect.x, _originalRect.width, left, right, cast(anchors.x, Int), cast(anchors.width, Int));
+			left = values[0];
+			right = values[1];
+		}
+		
+		top = calcPointPosOnLine(caps.y, _originalCaps.y, _originalRect.y, cast(anchors.y, Int));
+		bottom = calcPointPosOnLine(caps.y, _originalCaps.y, _originalRect.y + _originalRect.height, cast(anchors.height, Int));
+
+		if (!_parameters.exists("stretch_vertical")) {
+			var values:Array<Float> = calcMinMax(caps.y, _originalCaps.y, _originalRect.y, _originalRect.height, top, bottom, cast(anchors.y, Int), cast(anchors.height, Int));
+			top = values[0];
+			bottom = values[1];			
+		}
+		
+		_currentRect = new Rectangle(left, top, right - left, bottom - top);
+		trace(_currentRect.x + ", " + _currentRect.y + ", " + _currentRect.width + ", " + _currentRect.height);
+		_asset.x = _currentRect.x;
+		_asset.y = _currentRect.y;		
+	}
+	
+	private function calcMinMax (maxCap:Float, originalCap:Float, originalPos:Float, originalWidth:Float, minVal:Float, maxVal:Float, minAnchor:Int, maxAnchor:Int) : Array<Float> {
+		var newMaxVal:Float = maxVal;
+		var newMinVal:Float = minVal;
+		var center:Float = 0;
+		
+		if (minAnchor == 0)
+			newMaxVal = minVal + originalWidth;
+		else if (maxAnchor == 1)
+			newMinVal = maxVal - originalWidth;
+		else {
+			center = calcPointPosOnLine(maxCap, originalCap, originalPos + (originalWidth / 2), -1);
+			newMinVal = center - (originalWidth / 2);
+			newMaxVal = center + (originalWidth / 2);
+		}
+		
+		return [newMinVal, newMaxVal];
+	}
+	
+	private function calcPointPosOnLine (newCap:Float, originalCap:Float, originalValue:Float, anchorRef:Int) : Float {
+		var newValue:Float = originalValue;
+		
+		if (anchorRef > -1) {
+			var originalDistanceFromCap:Float = originalCap - originalValue;
+			switch (anchorRef) {
+				case 0:
+					newValue = originalValue;
+				case 1:
+					newValue = newCap - originalDistanceFromCap;
+			}
+		}
+		else {
+			newValue = (newCap / originalCap) * originalValue;
+		}
+		
+		return newValue;
 	}
 	
 	public function getParameters () : Dynamic {
 		return _parameters;
 	}
 	
-	public function getOriginalDimensions () : Point {
-		return _originalDimensions;
+	public function getOriginalDimensions () : Rectangle {
+		return _originalRect;
 	}
 	
-	public function getCurrentDimensions () : Point {
-		return _currentDimensions;
+	public function getCurrentDimensions () : Rectangle {
+		return _currentRect;
 	}
 	
 	public function getParent () : HxComponent {

@@ -21,6 +21,7 @@ class HxButton extends HxComponent {
 	override public function init () {
 		super.init();
 		
+		_asset.getChildByName("background").stop();
 		_parameters.set("width", _asset.width);
 		_parameters.set("height", _asset.height);
 		
@@ -34,27 +35,35 @@ class HxButton extends HxComponent {
 		_asset.addEventListener(MouseEvent.MOUSE_DOWN, onMouseDown);
 	}
 	
+	override public function resize () {
+		super.resize();
+		_asset.getChildByName("background").width = _currentRect.width;
+		_asset.getChildByName("background").height = _currentRect.height;
+		_parameters.set("width", _asset.width);
+		_parameters.set("height", _asset.height);
+	}
+	
 	private function onMouseOver (evt:MouseEvent) : Void {
 		if (evt.buttonDown)
-			_asset.gotoAndStop(3);
+			_asset.getChildByName("background").gotoAndStop(3);
 		else
-			_asset.gotoAndStop(2);
+			_asset.getChildByName("background").gotoAndStop(2);
 			
 		_asset.addChild(_label);
 	}
 
 	private function onMouseOut (evt:MouseEvent) : Void {
-		_asset.gotoAndStop(1);
+		_asset.getChildByName("background").gotoAndStop(1);
 		_asset.addChild(_label);
 	}
 
 	private function onMouseUp (evt:MouseEvent) : Void {
-		_asset.gotoAndStop(2);
+		_asset.getChildByName("background").gotoAndStop(2);
 		_asset.addChild(_label);
 	}
 
 	private function onMouseDown (evt:MouseEvent) : Void {
-		_asset.gotoAndStop(3);
+		_asset.getChildByName("background").gotoAndStop(3);
 		_asset.addChild(_label);
 	}
 	
