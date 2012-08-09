@@ -2,3 +2,4 @@
 .settings/
 bin/
 builder/
+assets/hxuikit/*.ttf
