@@ -145,15 +145,12 @@ class HxUiKit {
 			switch (e.name) {
 				case "anchor":
 					var anchors:Array<String> = e.innerData.split(",");
-					for (a in anchors) {						
+					for (a in anchors)						
 						ret.set("anchor_" + a, "true");
-					}
 				case "stretch":
 					var stretches:Array<String> = e.innerData.split(",");
-					for (s in stretches) {
+					for (s in stretches)
 						ret.set("stretch_" + s, "true");
-						trace("Setting: " + "stretch_" + s);
-					}
 				default:
 					ret.set(e.name, e.innerData);					
 			}

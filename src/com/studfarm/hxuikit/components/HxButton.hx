@@ -37,8 +37,7 @@ class HxButton extends HxComponent {
 	
 	override public function resize () {
 		super.resize();
-		_asset.getChildByName("background").width = _currentRect.width;
-		_asset.getChildByName("background").height = _currentRect.height;
+		
 		_parameters.set("width", _currentRect.width);
 		_parameters.set("height", _currentRect.height);
 		_label.getParameters().set("width", _currentRect.width);

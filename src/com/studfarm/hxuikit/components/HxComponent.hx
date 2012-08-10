@@ -72,8 +72,16 @@ class HxComponent extends Sprite {
 		
 		_currentRect = new Rectangle(left, top, right - left, bottom - top);
 		trace(_currentRect.x + ", " + _currentRect.y + ", " + _currentRect.width + ", " + _currentRect.height);
+		
+		// Set new position
 		_asset.x = _currentRect.x;
-		_asset.y = _currentRect.y;		
+		_asset.y = _currentRect.y;
+		
+		// Set new size
+		if (_asset.getChildByName("background") != null) {			
+			_asset.getChildByName("background").width = _currentRect.width;
+			_asset.getChildByName("background").height = _currentRect.height;
+		}
 	}
 	
 	private function calcMinMax (maxCap:Float, originalCap:Float, originalPos:Float, originalWidth:Float, minVal:Float, maxVal:Float, minAnchor:Int, maxAnchor:Int) : Array<Float> {

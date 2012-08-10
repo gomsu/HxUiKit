@@ -15,8 +15,6 @@
 		<type>com.studfarm.hxuikit.components.HxButton</type>
 		<label>Teppo on kova</label>
 		<labelFont>assets/hxuikit/Impact.ttf</labelFont>
-		<x>0.5</x>
-		<y>0.5</y>
 		<labelColor>ffffff</labelColor>
 		<fontSize>20</fontSize>
 		<anchor>left,top</anchor>
@@ -29,11 +27,23 @@
 		<type>com.studfarm.hxuikit.components.HxButton</type>
 		<label>SuperTeppo ostaa mopedin ehka huomenna moi moi moi</label>
 		<labelFont>assets/hxuikit/Impact.ttf</labelFont>
-		<x>0.2</x>
-		<y>0.2</y>
 		<labelColor>00ffff</labelColor>
 		<fontSize>15</fontSize>
 		<stretch>horizontal</stretch>
 		<anchor>left,right,bottom</anchor>
+	</Component>
+	
+	<Component>
+		<id>CenterLabel</id>
+		<parent>MainContainer</parent>
+		<target>MainLayout.centerlabel</target>
+		<type>com.studfarm.hxuikit.components.HxLabel</type>
+		<label>KESKELLÄ!</label>
+		<labelFont>assets/hxuikit/Impact.ttf</labelFont>
+		<labelColor>ffffff</labelColor>
+		<stretch>horizontal</stretch>
+		<fontSize>32</fontSize>
+		<textAlignHorizontal>center</textAlignHorizontal>
+		<textAlignVertical>center</textAlignVertical>
 	</Component>
 </ui>
