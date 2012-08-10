@@ -18,6 +18,9 @@
 		<labelColor>ffffff</labelColor>
 		<fontSize>20</fontSize>
 		<anchor>left,top</anchor>
+		<stretch>horizontal</stretch>
+		<textAlignHorizontal>left</textAlignHorizontal>
+		<textAlignVertical>center</textAlignVertical>
 	</Component>
 	
 	<Component>
@@ -31,6 +34,8 @@
 		<fontSize>15</fontSize>
 		<stretch>horizontal</stretch>
 		<anchor>left,right,bottom</anchor>
+		<textAlignHorizontal>center</textAlignHorizontal>
+		<textAlignVertical>center</textAlignVertical>
 	</Component>
 	
 	<Component>

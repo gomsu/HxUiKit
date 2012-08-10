@@ -1,10 +1,11 @@
 package com.studfarm.hxuikit.components;
 
-import flash.text.TextField;
-import flash.text.TextFormat;
-import flash.text.Font;
+import nme.text.TextField;
+import nme.text.TextFormat;
+import nme.text.Font;
 import nme.Assets;
 import nme.geom.Rectangle;
+import nme.text.TextFormatAlign;
 
 class HxLabel extends HxComponent {
 	
@@ -39,9 +40,43 @@ class HxLabel extends HxComponent {
 	override public function resize () {
 		super.resize();
 		
-		_tf.x = 0;
-		_tf.y = 0;	
-		_tf.width = _currentRect.width;
-		_tf.height = _currentRect.height;
+		var dft:TextFormat = _tf.defaultTextFormat;
+		
+		_tf.width = _tf.textWidth + 4;
+		if (_tf.width > _currentRect.width)
+			_tf.width = _currentRect.width;
+			
+		_tf.height = _tf.textHeight + 4;
+		if (_tf.height > _currentRect.height)
+			_tf.height = _currentRect.height;
+				
+		if (_parameters.exists("textAlignHorizontal")) {
+			switch (_parameters.get("textAlignHorizontal")) {
+				case "center":
+					_tf.x = (_currentRect.width - _tf.width) / 2;
+					dft.align =  TextFormatAlign.CENTER;
+				case "left":
+					_tf.x = 0;
+					dft.align =  TextFormatAlign.LEFT;
+				case "right":
+					_tf.x = _currentRect.width - _tf.width;
+					dft.align =  TextFormatAlign.RIGHT; 
+				case "justify":
+					_tf.width = _currentRect.width;
+					dft.align =  TextFormatAlign.JUSTIFY;
+			}
+		}
+		if (_parameters.exists("textAlignVertical")) {
+			switch (_parameters.get("textAlignVertical")) {
+				case "center":
+					_tf.y = (_currentRect.height - _tf.height) / 2 - 1;	
+				case "top":
+					_tf.y = 0;
+				case "bottom":
+					_tf.y = _currentRect.height - _tf.height;
+			}
+		}
+				
+		_tf.defaultTextFormat = dft;
 	}
 }

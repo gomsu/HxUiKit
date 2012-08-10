@@ -12,6 +12,7 @@ import nme.display.DisplayObjectContainer;
 import nme.display.MovieClip;
 import nme.display.Stage;
 import nme.geom.Point;
+import nme.Assets;
 import haxe.xml.Fast;
 
 import com.studfarm.hxuikit.components.HxComponent;
@@ -20,13 +21,11 @@ import com.studfarm.hxuikit.components.HxContainer;
 
 class HxUiKit {
 	
-	public static var LOG_PREFIX:String = "HxUiKit: ";
 	public static var DEFAULT_SKIN_FILE:String = "assets_hxuikit_skin_swf.swf";
 	public static var DEFAULT_DEFINITION_FILE:String = "assets_hxuikit_ui_xml.xml";
 	
 	private static var _skin:MovieClip;
 	private static var _layoutMap:Hash<DisplayObjectContainer>;
-	private static var _layoutPropertyMap:Hash<Hash<Dynamic>>;
 	private static var _components:Array<HxComponent>;
 	
 	private var _skinLoader:Loader;
@@ -55,21 +54,12 @@ class HxUiKit {
 	public function storeLayout (name:String, layout:DisplayObjectContainer) {
 		if (_layoutMap == null)
 			_layoutMap = new Hash<DisplayObjectContainer>();
-		if (_layoutPropertyMap == null)
-			_layoutPropertyMap = new Hash<Hash<Dynamic>>();
-		
-		var propertyMap:Hash<Dynamic> = new Hash<Dynamic>();
-		propertyMap.set("dimensions", new Point(layout.width, layout.height));
-		_layoutPropertyMap.set(name, propertyMap);
+			
 		_layoutMap.set(name, layout);	
 	}
 
 	public function showLayout (name:String) {
 		nme.Lib.current.addChild(_layoutMap.get(name));
-	}
-
-	public static function getLayoutPropertiesByName (name:String) : Hash<Dynamic> {
-		return _layoutPropertyMap.get(name);
 	}
 
 	public static function getLayoutElementByName (name:String) : Dynamic {
@@ -102,18 +92,24 @@ class HxUiKit {
 	}
 
 	private function loadDefinition () : Void {
+		/*
 		_definitionLoader = new URLLoader();
 		_definitionLoader.addEventListener(Event.COMPLETE, onDefinitionLoaded);
 		_definitionLoader.addEventListener(IOErrorEvent.IO_ERROR, onDefinitionLoadError);
 		_definitionLoader.load(new URLRequest(_uiDefinitionName));
+		 */
+		 
+		 _definitionLoader = new URLLoader();
+		 _definitionLoader.data = Assets.getBytes("assets/hxuikit/ui.xml");
+		 onDefinitionLoaded(new Event(Event.COMPLETE));
 	}
 	
 	private function onDefinitionLoaded (evt:Event) {
-		trace(LOG_PREFIX + "UI definition loaded");
 		
-		var xml:Dynamic = Xml.parse(_definitionLoader.data);
-		_fastXml = new Fast(xml.firstElement());
-		
+		trace("UI definition loaded");
+		var defData:Xml;
+		defData = Xml.parse(_definitionLoader.data);
+		_fastXml = new Fast(defData.firstElement());
 		loadTheme();
 	}
 	
@@ -161,7 +157,7 @@ class HxUiKit {
 	}
 	
 	private function onDefinitionLoadError (evt:Event) {
-		trace(LOG_PREFIX + "UI definition load error");
+		trace("UI definition load error");
 	}	
 	
 	private function loadTheme () {
@@ -172,10 +168,10 @@ class HxUiKit {
 	}
 	
 	private function onSkinLoaded (evt:Event) {
-		trace(LOG_PREFIX + "UI skin loaded");
+		trace("UI skin loaded");
 	}
 	
 	private function onSkinLoadError (evt:Event) {
-		trace(LOG_PREFIX + "UI skin load error");
+		trace("UI skin load error");
 	}
 }

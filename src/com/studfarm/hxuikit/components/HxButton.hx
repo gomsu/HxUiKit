@@ -5,7 +5,6 @@ import nme.events.MouseEvent;
 import nme.events.Event;
 import nme.events.MouseEvent;
 import nme.events.IOErrorEvent;
-
 import nme.Assets;
 
 class HxButton extends HxComponent {
@@ -25,9 +24,11 @@ class HxButton extends HxComponent {
 		_parameters.set("width", _asset.width);
 		_parameters.set("height", _asset.height);
 		
-		_label = new HxLabel(_parameters);
+		if (_parameters.exists("label")) {
+			_label = new HxLabel(_parameters);
+			_asset.addChild(_label);
+		}
 		
-		_asset.addChild(_label);
 		_asset.addEventListener(MouseEvent.CLICK, onClick);
 		_asset.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
 		_asset.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
@@ -40,8 +41,6 @@ class HxButton extends HxComponent {
 		
 		_parameters.set("width", _currentRect.width);
 		_parameters.set("height", _currentRect.height);
-		_label.getParameters().set("width", _currentRect.width);
-		_label.getParameters().set("height", _currentRect.height);
 		_label.resize();
 	}
 	
@@ -51,22 +50,29 @@ class HxButton extends HxComponent {
 		else
 			_asset.getChildByName("background").gotoAndStop(2);
 			
-		_asset.addChild(_label);
+		if (_parameters.exists("label"))
+			_asset.addChild(_label);	
 	}
 
 	private function onMouseOut (evt:MouseEvent) : Void {
 		_asset.getChildByName("background").gotoAndStop(1);
-		_asset.addChild(_label);
+		
+		if (_parameters.exists("label"))
+			_asset.addChild(_label);
 	}
 
 	private function onMouseUp (evt:MouseEvent) : Void {
 		_asset.getChildByName("background").gotoAndStop(2);
-		_asset.addChild(_label);
+		
+		if (_parameters.exists("label"))
+			_asset.addChild(_label);
 	}
 
 	private function onMouseDown (evt:MouseEvent) : Void {
 		_asset.getChildByName("background").gotoAndStop(3);
-		_asset.addChild(_label);
+		
+		if (_parameters.exists("label"))
+			_asset.addChild(_label);
 	}
 	
 	private function onClick (evt:MouseEvent) : Void {
