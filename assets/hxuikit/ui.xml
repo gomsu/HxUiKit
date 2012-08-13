@@ -36,6 +36,8 @@
 		<anchor>left,right,bottom</anchor>
 		<textAlignHorizontal>center</textAlignHorizontal>
 		<textAlignVertical>center</textAlignVertical>
+		<minWidth>80</minWidth>
+		<minHeight>60</minHeight>
 	</Component>
 	
 	<Component>

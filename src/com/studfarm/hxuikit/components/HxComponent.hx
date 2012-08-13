@@ -47,28 +47,23 @@ class HxComponent extends Sprite {
 		var anchorRightValue:Int = _parameters.exists("anchor_right") && (!_parameters.exists("anchor_left") || _parameters.exists("stretch_horizontal")) ? 1 : -1;
 		var anchorTopValue:Int = _parameters.exists("anchor_top") ? 0 : -1;
 		var anchorBottomValue:Int = _parameters.exists("anchor_bottom") && (!_parameters.exists("anchor_top") || _parameters.exists("stretch_vertical")) ? 1 : -1;
-		var anchors:Rectangle = new Rectangle(anchorLeftValue, anchorTopValue, anchorRightValue, anchorBottomValue);
+		var anchors:Rectangle = new Rectangle(anchorLeftValue, anchorTopValue, anchorRightValue, anchorBottomValue);		
+		var values:Array<Float>;
 		
 		if (parent != null)
 			caps = new Point(parent.getCurrentDimensions().width, parent.getCurrentDimensions().height);
 			
 		left = calcPointPosOnLine(caps.x, _originalCaps.x, _originalRect.x, cast(anchors.x, Int));
 		right = calcPointPosOnLine(caps.x, _originalCaps.x, _originalRect.x + _originalRect.width, cast(anchors.width, Int));
-		
-		if (!_parameters.exists("stretch_horizontal")) {
-			var values:Array<Float> = calcMinMax(caps.x, _originalCaps.x, _originalRect.x, _originalRect.width, left, right, cast(anchors.x, Int), cast(anchors.width, Int));
-			left = values[0];
-			right = values[1];
-		}
+		values = calcMinMax(caps.x, _originalCaps.x, _originalRect.x, _originalRect.width, left, right, cast(anchors.x, Int), cast(anchors.width, Int), _parameters.exists("stretch_horizontal"), _parameters.exists("minWidth") ? Std.parseInt(_parameters.get("minWidth")) : -1);
+		left = values[0];
+		right = values[1];
 		
 		top = calcPointPosOnLine(caps.y, _originalCaps.y, _originalRect.y, cast(anchors.y, Int));
 		bottom = calcPointPosOnLine(caps.y, _originalCaps.y, _originalRect.y + _originalRect.height, cast(anchors.height, Int));
-
-		if (!_parameters.exists("stretch_vertical")) {
-			var values:Array<Float> = calcMinMax(caps.y, _originalCaps.y, _originalRect.y, _originalRect.height, top, bottom, cast(anchors.y, Int), cast(anchors.height, Int));
-			top = values[0];
-			bottom = values[1];			
-		}
+		values = calcMinMax(caps.y, _originalCaps.y, _originalRect.y, _originalRect.height, top, bottom, cast(anchors.y, Int), cast(anchors.height, Int), _parameters.exists("stretch_vertical"), _parameters.exists("minHeight") ? Std.parseInt(_parameters.get("minHeight")) : -1);
+		top = values[0];
+		bottom = values[1];
 		
 		_currentRect = new Rectangle(left, top, right - left, bottom - top);
 		trace(_currentRect.x + ", " + _currentRect.y + ", " + _currentRect.width + ", " + _currentRect.height);
@@ -84,21 +79,26 @@ class HxComponent extends Sprite {
 		}
 	}
 	
-	private function calcMinMax (maxCap:Float, originalCap:Float, originalPos:Float, originalWidth:Float, minVal:Float, maxVal:Float, minAnchor:Int, maxAnchor:Int) : Array<Float> {
+	private function calcMinMax (maxCap:Float, originalCap:Float, originalPos:Float, originalLength:Float, minVal:Float, maxVal:Float, minAnchor:Int, maxAnchor:Int, stretching:Bool = false, minLength:Float = -1) : Array<Float> {
 		var newMaxVal:Float = maxVal;
 		var newMinVal:Float = minVal;
 		var center:Float = 0;
 		
-		if (minAnchor == 0)
-			newMaxVal = minVal + originalWidth;
-		else if (maxAnchor == 1)
-			newMinVal = maxVal - originalWidth;
-		else {
-			center = calcPointPosOnLine(maxCap, originalCap, originalPos + (originalWidth / 2), -1);
-			newMinVal = center - (originalWidth / 2);
-			newMaxVal = center + (originalWidth / 2);
-		}
+		if (minLength == -1)
+			minLength = originalLength;
 		
+		if ((stretching && minLength > (maxVal - minVal)) || !stretching) {
+			if (minAnchor == 0)			
+				newMaxVal = minVal + minLength;
+			else if (maxAnchor == 1)
+				newMinVal = maxVal - minLength;
+			else {
+				center = calcPointPosOnLine(maxCap, originalCap, originalPos + (minLength / 2), -1);
+				newMinVal = center - (minLength / 2);
+				newMaxVal = center + (minLength / 2);
+			}
+		}
+
 		return [newMinVal, newMaxVal];
 	}
 	
