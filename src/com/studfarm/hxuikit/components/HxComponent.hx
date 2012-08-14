@@ -22,7 +22,7 @@ class HxComponent extends Sprite {
 	
 	public function init () {
 		if (_parameters.exists("target")) {
-			_asset = HxUiKit.getLayoutElementByName(_parameters.get("target"));
+			_asset = HxUiKit.getLayoutElementByName(_parameters.get("layoutName"), _parameters.get("target"));
 			_asset.stop();			
 			_originalRect = new Rectangle(_asset.x, _asset.y, _asset.width, _asset.height);
 			_currentRect = new Rectangle(_originalRect.x, _originalRect.y, _originalRect.width, _originalRect.height);

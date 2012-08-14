@@ -1,56 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui>
-	<Component>
-		<id>MainContainer</id>
-		<target>MainLayout.maincontainer</target>
-		<type>com.studfarm.hxuikit.components.HxContainer</type>
-		<stretch>vertical,horizontal</stretch>
-		<anchor>left,right,top,bottom</anchor>
-	</Component>
+	<ComponentTemplates>
+		<Component>
+			<id>SuperTeppoButton</id>
+			<target>MainLayout.button2</target>
+			<type>com.studfarm.hxuikit.components.HxButton</type>
+			<label>SuperTeppo ostaa mopedin ehka huomenna moi moi moi</label>
+			<labelFont>assets/hxuikit/Impact.ttf</labelFont>
+			<labelColor>00ffff</labelColor>
+			<fontSize>15</fontSize>
+			<stretch>horizontal</stretch>
+			<anchor>left,right,bottom</anchor>
+			<textAlignHorizontal>center</textAlignHorizontal>
+			<textAlignVertical>center</textAlignVertical>
+			<minWidth>80</minWidth>
+			<minHeight>60</minHeight>
+		</Component>		
+	</ComponentTemplates>
 	
-	<Component>
-		<id>TeppoButton</id>
-		<parent>MainContainer</parent>
-		<target>MainLayout.button1</target>
-		<type>com.studfarm.hxuikit.components.HxButton</type>
-		<label>Teppo on kova</label>
-		<labelFont>assets/hxuikit/Impact.ttf</labelFont>
-		<labelColor>ffffff</labelColor>
-		<fontSize>20</fontSize>
-		<anchor>left,top</anchor>
-		<stretch>horizontal</stretch>
-		<textAlignHorizontal>left</textAlignHorizontal>
-		<textAlignVertical>center</textAlignVertical>
-	</Component>
-	
-	<Component>
-		<id>SuperTeppoButton</id>
-		<parent>MainContainer</parent>
-		<target>MainLayout.button2</target>
-		<type>com.studfarm.hxuikit.components.HxButton</type>
-		<label>SuperTeppo ostaa mopedin ehka huomenna moi moi moi</label>
-		<labelFont>assets/hxuikit/Impact.ttf</labelFont>
-		<labelColor>00ffff</labelColor>
-		<fontSize>15</fontSize>
-		<stretch>horizontal</stretch>
-		<anchor>left,right,bottom</anchor>
-		<textAlignHorizontal>center</textAlignHorizontal>
-		<textAlignVertical>center</textAlignVertical>
-		<minWidth>80</minWidth>
-		<minHeight>60</minHeight>
-	</Component>
-	
-	<Component>
-		<id>CenterLabel</id>
-		<parent>MainContainer</parent>
-		<target>MainLayout.centerlabel</target>
-		<type>com.studfarm.hxuikit.components.HxLabel</type>
-		<label>KESKELLÄ!</label>
-		<labelFont>assets/hxuikit/Impact.ttf</labelFont>
-		<labelColor>ffffff</labelColor>
-		<stretch>horizontal</stretch>
-		<fontSize>32</fontSize>
-		<textAlignHorizontal>center</textAlignHorizontal>
-		<textAlignVertical>center</textAlignVertical>
-	</Component>
+	<Layouts>
+		<Layout name="MainLayout">
+			<Component id="MainContainer">
+				<target>maincontainer</target>
+				<type>com.studfarm.hxuikit.components.HxContainer</type>
+				<stretch>vertical,horizontal</stretch>
+				<anchor>left,right,top,bottom</anchor>
+				
+				<Components>
+					<Component id="TeppoButton">
+						<target>button1</target>
+						<type>com.studfarm.hxuikit.components.HxButton</type>
+						<label>Teppo on kova</label>
+						<labelFont>assets/hxuikit/Impact.ttf</labelFont>
+						<labelColor>ffffff</labelColor>
+						<fontSize>20</fontSize>
+						<anchor>left,top</anchor>
+						<stretch>horizontal</stretch>
+						<textAlignHorizontal>left</textAlignHorizontal>
+						<textAlignVertical>center</textAlignVertical>
+					</Component>
+					
+					<Component id="SuperTeppoButton">
+						<target>button2</target>
+						<type>com.studfarm.hxuikit.components.HxButton</type>
+						<label>SuperTeppo ostaa mopedin ehka huomenna moi moi moi</label>
+						<labelFont>assets/hxuikit/Impact.ttf</labelFont>
+						<labelColor>00ffff</labelColor>
+						<fontSize>15</fontSize>
+						<stretch>horizontal</stretch>
+						<anchor>left,right,bottom</anchor>
+						<textAlignHorizontal>center</textAlignHorizontal>
+						<textAlignVertical>center</textAlignVertical>
+						<minWidth>80</minWidth>
+						<minHeight>60</minHeight>
+					</Component>
+					
+					<Component id="CenterLabel">
+						<target>centerlabel</target>
+						<type>com.studfarm.hxuikit.components.HxLabel</type>
+						<label>KESKELLÄ!</label>
+						<labelFont>assets/hxuikit/Impact.ttf</labelFont>
+						<labelColor>ffffff</labelColor>
+						<stretch>horizontal</stretch>
+						<fontSize>32</fontSize>
+						<textAlignHorizontal>center</textAlignHorizontal>
+						<textAlignVertical>center</textAlignVertical>
+					</Component>
+				</Components>
+			</Component>
+		</Layout>
+	</Layouts>	
 </ui>

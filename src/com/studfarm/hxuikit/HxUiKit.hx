@@ -26,7 +26,8 @@ class HxUiKit {
 	
 	private static var _skin:MovieClip;
 	private static var _layoutMap:Hash<DisplayObjectContainer>;
-	private static var _components:Array<HxComponent>;
+	private static var _layouts:Hash<Hash<Dynamic>>;
+	private static var _componentMap:Hash<HxComponent>;
 	
 	private var _skinLoader:Loader;
 	private var _skinFileName:String;
@@ -42,30 +43,36 @@ class HxUiKit {
 		
 		_uiDefinitionName = uiDefinition;
 		_skinFileName = skinFile;
-		_components = new Array<HxComponent>();
+		_componentMap = new Hash<HxComponent>();
+		_layouts = new Hash<Hash<Dynamic>>();
+		
+		nme.Lib.current.stage.addEventListener(Event.RESIZE, onResize);
 		
 		loadDefinition();
 	}
 
 	public function build () {
-		iterateElement(_fastXml);
+		iterateLayoutElement(_fastXml.node.Layouts);
 	}
 
 	public function storeLayout (name:String, layout:DisplayObjectContainer) {
-		if (_layoutMap == null)
-			_layoutMap = new Hash<DisplayObjectContainer>();
-			
-		_layoutMap.set(name, layout);	
+		 if (!_layouts.exists(name)) {			
+		 	_layouts.set(name, new Hash<Dynamic>());
+			_layouts.get(name).set("layoutskin", layout);
+		 }
 	}
 
 	public function showLayout (name:String) {
-		nme.Lib.current.addChild(_layoutMap.get(name));
+		if (_layouts.exists(name) && (_layouts.get(name).exists("layoutskin"))) {			
+			nme.Lib.current.addChild(_layouts.get(name).get("layoutskin"));
+			_layouts.get(name).set("visible", true);
+			onResize(new Event(Event.RESIZE));
+		}
 	}
 
-	public static function getLayoutElementByName (name:String) : Dynamic {
-		
-		var tree:Array<String> = name.split(".");
-		var element:Dynamic = _layoutMap.get(tree[0]);
+	public static function getLayoutElementByName (layoutName:String, elementName:String) : Dynamic {
+		var tree:Array<String> = elementName.split(".");
+		var element:Dynamic = _layouts.get(layoutName).get("layoutskin").getChildByName(tree[0]);
 		var tmpElement:Dynamic;
 		
 		tree.shift();
@@ -83,29 +90,19 @@ class HxUiKit {
 	}
 
 	public static function getComponentById (id:String) : HxComponent {
-		for (component in _components) {
-			if (component.getParameters().get("id") == id)
-				return component; 
-		}
+		if (_componentMap.exists(id))
+			return _componentMap.get(id);
 		
 		return null;
 	}
 
 	private function loadDefinition () : Void {
-		/*
-		_definitionLoader = new URLLoader();
-		_definitionLoader.addEventListener(Event.COMPLETE, onDefinitionLoaded);
-		_definitionLoader.addEventListener(IOErrorEvent.IO_ERROR, onDefinitionLoadError);
-		_definitionLoader.load(new URLRequest(_uiDefinitionName));
-		 */
-		 
 		 _definitionLoader = new URLLoader();
 		 _definitionLoader.data = Assets.getBytes("assets/hxuikit/ui.xml");
 		 onDefinitionLoaded(new Event(Event.COMPLETE));
 	}
 	
-	private function onDefinitionLoaded (evt:Event) {
-		
+	private function onDefinitionLoaded (evt:Event) {		
 		trace("UI definition loaded");
 		var defData:Xml;
 		defData = Xml.parse(_definitionLoader.data);
@@ -113,28 +110,65 @@ class HxUiKit {
 		loadTheme();
 	}
 	
-	private function iterateElement (element:Fast) {
+	private function iterateLayoutElement (element:Fast) {
+		for (e in element.elements) {
+			switch (e.name) {
+				case "Layout":
+					var layoutName:String = e.att.name;
+					if (_layouts.exists(layoutName)) {
+						_layouts.get(layoutName).set("components", new Array<HxComponent>());
+						iterateComponentElement(e, layoutName);
+					}
+				default:
+			}
+		}
+	}
+	
+	private function iterateComponentElement (element:Fast, layoutName:String, parentComponentId:String = null) {
 		for (e in element.elements) {
 			switch (e.name) {
 				case "Component":
-					var properties = getProperties(e);
+					var properties:Hash<String> = getProperties(e);
+					properties.set("layoutName", layoutName);
+					properties.set("id", e.att.id);
+					if (parentComponentId != null)
+						properties.set("parent", parentComponentId);
 					var cmp:HxComponent = Type.createInstance(Type.resolveClass(properties.get("type")), [properties]);
-					_components.push(cmp);
+					_componentMap.set(properties.get("id"), cmp);
+					_layouts.get(layoutName).get("components").push(cmp);
+					var subComponentNode:Fast = getSubComponentNode(e);
+					if (subComponentNode != null)
+						iterateComponentElement(subComponentNode, layoutName, properties.get("id"));
+				default:
 			}
 		}
 		
-		onResize(new Event(Event.RESIZE));		
-		nme.Lib.current.stage.addEventListener(Event.RESIZE, onResize);
+		
+		
+	}
+	
+	private function getSubComponentNode (element:Fast) : Fast {
+		for (e in element.elements)
+			if (e.name == "Components")
+				return e;
+				
+		return null;
 	}
 	
 	private function onResize (evt:Event) {
-		for (cmp in _components) {
-			cmp.resize();
+		for (layout in _layouts) {
+			if (layout.exists("visible") && layout.get("visible") == true) {
+				var components:Array<HxComponent> = layout.get("components");
+				for (cmp in components) {
+					cmp.resize();
+				}
+			}
 		}
+		
 		trace("---------");
 	}
 	
-	private function getProperties (element:Fast) : Dynamic {
+	private function getProperties (element:Fast) : Hash<String> {
 		var ret = new Hash<String>();
 		
 		for (e in element.elements) {
@@ -147,10 +181,10 @@ class HxUiKit {
 					var stretches:Array<String> = e.innerData.split(",");
 					for (s in stretches)
 						ret.set("stretch_" + s, "true");
+				case "Components":
 				default:
 					ret.set(e.name, e.innerData);					
-			}
-			
+			}			
 		}
 		
 		return ret;
