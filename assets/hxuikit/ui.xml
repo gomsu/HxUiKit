@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui>
 	<ComponentTemplates>
-		<Component>
-			<id>SuperTeppoButton</id>
-			<target>MainLayout.button2</target>
+		<ComponentTemplate templateName="BasicButton">
 			<type>com.studfarm.hxuikit.components.HxButton</type>
 			<label>SuperTeppo ostaa mopedin ehka huomenna moi moi moi</label>
 			<labelFont>assets/hxuikit/Impact.ttf</labelFont>
-			<labelColor>00ffff</labelColor>
-			<fontSize>15</fontSize>
+			<labelColor>ffffff</labelColor>
+			<fontSize>20</fontSize>
 			<stretch>horizontal</stretch>
-			<anchor>left,right,bottom</anchor>
 			<textAlignHorizontal>center</textAlignHorizontal>
 			<textAlignVertical>center</textAlignVertical>
 			<minWidth>80</minWidth>
 			<minHeight>60</minHeight>
-		</Component>		
+		</ComponentTemplate>		
 	</ComponentTemplates>
 	
 	<Layouts>
@@ -27,32 +24,19 @@
 				<anchor>left,right,top,bottom</anchor>
 				
 				<Components>
-					<Component id="TeppoButton">
+					<Component id="TeppoButton" template="BasicButton">
 						<target>button1</target>
-						<type>com.studfarm.hxuikit.components.HxButton</type>
 						<label>Teppo on kova</label>
-						<labelFont>assets/hxuikit/Impact.ttf</labelFont>
-						<labelColor>ffffff</labelColor>
-						<fontSize>20</fontSize>
 						<anchor>left,top</anchor>
-						<stretch>horizontal</stretch>
 						<textAlignHorizontal>left</textAlignHorizontal>
-						<textAlignVertical>center</textAlignVertical>
 					</Component>
 					
-					<Component id="SuperTeppoButton">
+					<Component id="SuperTeppoButton" template="BasicButton">
 						<target>button2</target>
-						<type>com.studfarm.hxuikit.components.HxButton</type>
 						<label>SuperTeppo ostaa mopedin ehka huomenna moi moi moi</label>
-						<labelFont>assets/hxuikit/Impact.ttf</labelFont>
 						<labelColor>00ffff</labelColor>
 						<fontSize>15</fontSize>
-						<stretch>horizontal</stretch>
 						<anchor>left,right,bottom</anchor>
-						<textAlignHorizontal>center</textAlignHorizontal>
-						<textAlignVertical>center</textAlignVertical>
-						<minWidth>80</minWidth>
-						<minHeight>60</minHeight>
 					</Component>
 					
 					<Component id="CenterLabel">

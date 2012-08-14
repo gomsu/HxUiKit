@@ -28,6 +28,7 @@ class HxUiKit {
 	private static var _layoutMap:Hash<DisplayObjectContainer>;
 	private static var _layouts:Hash<Hash<Dynamic>>;
 	private static var _componentMap:Hash<HxComponent>;
+	private static var _templateMap:Hash<Hash<String>>;
 	
 	private var _skinLoader:Loader;
 	private var _skinFileName:String;
@@ -52,6 +53,7 @@ class HxUiKit {
 	}
 
 	public function build () {
+		iterateComponentElement(_fastXml.node.ComponentTemplates, "", null);
 		iterateLayoutElement(_fastXml.node.Layouts);
 	}
 
@@ -125,10 +127,23 @@ class HxUiKit {
 	}
 	
 	private function iterateComponentElement (element:Fast, layoutName:String, parentComponentId:String = null) {
+		var properties:Hash<String>;
+		
 		for (e in element.elements) {
 			switch (e.name) {
 				case "Component":
-					var properties:Hash<String> = getProperties(e);
+					properties = new Hash<String>();
+					var tmpProperties = getProperties(e);
+					if (e.has.template) {
+						var templateProperties:Hash<String> = _templateMap.get(e.att.template);
+						for (prop in templateProperties.keys())
+							properties.set(prop, templateProperties.get(prop));
+						for (tmpProp in tmpProperties.keys())
+							properties.set(tmpProp, tmpProperties.get(tmpProp));
+					}
+					else
+						properties = getProperties(e);
+						
 					properties.set("layoutName", layoutName);
 					properties.set("id", e.att.id);
 					if (parentComponentId != null)
@@ -139,12 +154,14 @@ class HxUiKit {
 					var subComponentNode:Fast = getSubComponentNode(e);
 					if (subComponentNode != null)
 						iterateComponentElement(subComponentNode, layoutName, properties.get("id"));
+				case "ComponentTemplate":
+					properties = getProperties(e);
+					if (_templateMap == null)
+						_templateMap = new Hash<Hash<String>>();
+					_templateMap.set(e.att.templateName, properties);
 				default:
 			}
 		}
-		
-		
-		
 	}
 	
 	private function getSubComponentNode (element:Fast) : Fast {
