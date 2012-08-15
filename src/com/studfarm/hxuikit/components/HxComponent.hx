@@ -84,10 +84,9 @@ class HxComponent extends Sprite {
 		var newMinVal:Float = minVal;
 		var center:Float = 0;
 		
-		if (minLength == -1)
-			minLength = originalLength;
-		
 		if ((stretching && minLength > (maxVal - minVal)) || !stretching) {
+			if (minLength == -1)
+				minLength = originalLength;
 			if (minAnchor == 0)			
 				newMaxVal = minVal + minLength;
 			else if (maxAnchor == 1)

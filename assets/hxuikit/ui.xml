@@ -11,7 +11,7 @@
 			<textAlignHorizontal>center</textAlignHorizontal>
 			<textAlignVertical>center</textAlignVertical>
 			<minWidth>80</minWidth>
-			<minHeight>60</minHeight>
+			<minHeight>50</minHeight>
 		</ComponentTemplate>		
 	</ComponentTemplates>
 	
@@ -25,14 +25,14 @@
 				
 				<Components>
 					<Component id="TeppoButton" template="BasicButton">
-						<target>button1</target>
+						<target>maincontainer.button1</target>
 						<label>Teppo on kova</label>
 						<anchor>left,top</anchor>
 						<textAlignHorizontal>left</textAlignHorizontal>
 					</Component>
 					
 					<Component id="SuperTeppoButton" template="BasicButton">
-						<target>button2</target>
+						<target>maincontainer.button2</target>
 						<label>SuperTeppo ostaa mopedin ehka huomenna moi moi moi</label>
 						<labelColor>00ffff</labelColor>
 						<fontSize>15</fontSize>
@@ -40,7 +40,7 @@
 					</Component>
 					
 					<Component id="CenterLabel">
-						<target>centerlabel</target>
+						<target>maincontainer.centerlabel</target>
 						<type>com.studfarm.hxuikit.components.HxLabel</type>
 						<label>KESKELLÄ!</label>
 						<labelFont>assets/hxuikit/Impact.ttf</labelFont>
@@ -49,6 +49,17 @@
 						<fontSize>32</fontSize>
 						<textAlignHorizontal>center</textAlignHorizontal>
 						<textAlignVertical>center</textAlignVertical>
+					</Component>
+					
+					<Component id="PikachuImage">
+						<target>maincontainer.pikachuimage</target>
+						<type>com.studfarm.hxuikit.components.HxImage</type>
+						<anchor>left,right,bottom</anchor>
+						<stretch>horizontal,vertical</stretch>
+						<imageAlignHorizontal>center</imageAlignHorizontal>
+						<imageAlignVertical>center</imageAlignVertical>
+						<keepImageAspectRatio>true</keepImageAspectRatio>
+						<allowImageScaling>true</allowImageScaling>
 					</Component>
 				</Components>
 			</Component>

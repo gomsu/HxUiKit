@@ -18,6 +18,7 @@ import haxe.xml.Fast;
 import com.studfarm.hxuikit.components.HxComponent;
 import com.studfarm.hxuikit.components.HxButton;
 import com.studfarm.hxuikit.components.HxContainer;
+import com.studfarm.hxuikit.components.HxImage;
 
 class HxUiKit {
 	
@@ -58,8 +59,9 @@ class HxUiKit {
 	}
 
 	public function storeLayout (name:String, layout:DisplayObjectContainer) {
-		 if (!_layouts.exists(name)) {			
-		 	_layouts.set(name, new Hash<Dynamic>());
+		 if (!_layouts.exists(name)) {						
+		 	trace("stored layout: " + name);
+			_layouts.set(name, new Hash<Dynamic>());
 			_layouts.get(name).set("layoutskin", layout);
 		 }
 	}
