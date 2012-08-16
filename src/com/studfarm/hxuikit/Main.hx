@@ -25,15 +25,15 @@ class Main {
 		
 		_main = nme.Lib.current;
 		_uikit = new HxUiKit(null, null);
-		
-		
+				
 		_uikit.storeLayout("MainLayout", new MainLayout());
 		_uikit.build();
 		_uikit.showLayout("MainLayout");
 		
-		var test:Bitmap = new Bitmap(Assets.getBitmapData("assets/hxuikit/testimage.jpg"));
+		//var test:Bitmap = new Bitmap(Assets.getBitmapData("assets/hxuikit/testimage.jpg"));
 		var testImage:HxImage = cast(HxUiKit.getComponentById("TestImage"), HxImage);
-		testImage.setImageAsset(test);
+		//testImage.setImageAsset(test);
+		testImage.setImageUrl("http://bluesun.kapsi.fi/aw/hyperion.png");
 		
 		HxUiKit.getComponentById("TeppoButton").addEventListener(HxButton.CLICK, testSomething);
 	}
