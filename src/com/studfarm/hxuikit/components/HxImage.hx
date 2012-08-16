@@ -2,21 +2,44 @@ package com.studfarm.hxuikit.components;
 
 import nme.geom.Point;
 import nme.geom.Rectangle;
+import nme.display.DisplayObject;
 
 class HxImage extends HxComponent {
 	private var _originalAspectRatio:Float;
 	private var _originalImageSize:Point;
 	private var _currentImageRect:Rectangle;
+	private var _imageUrl:String;
 	
 	public function new (params:Dynamic) {
 		super(params);
 		init();
 	}
 	
+	public function setImageAsset (asset:DisplayObject) {
+		asset.name = "image";
+		_asset.addChild(asset);
+		calcEssentials();
+		resize();
+	}
+	
+	public function setImageUrl (url:String) {
+		
+	}
+	
 	override public function init () {
 		super.init();
-		_originalAspectRatio = _asset.getChildByName("image").width / _asset.getChildByName("image").height;
-		_originalImageSize = new Point (_asset.getChildByName("image").width, _asset.getChildByName("image").height);
+		calcEssentials();
+	}
+	
+	private function calcEssentials () {
+		if (_asset != null && _asset.getChildByName("image") != null) {
+			_originalAspectRatio = _asset.getChildByName("image").width / _asset.getChildByName("image").height;
+			_originalImageSize = new Point (_asset.getChildByName("image").width, _asset.getChildByName("image").height);
+		}
+		else {
+			_originalAspectRatio = 1.3333;
+			_originalImageSize = new Point (0, 0);
+		}
 	}
 	
 	override public function resize () {
@@ -25,11 +48,13 @@ class HxImage extends HxComponent {
 		calcImageSize();
 		calcImagePos();
 		
-		_asset.getChildByName("image").x = _currentImageRect.x;
-		_asset.getChildByName("image").y = _currentImageRect.y;
-		
-		_asset.getChildByName("image").width = _currentImageRect.width;
-		_asset.getChildByName("image").height = _currentImageRect.height;
+		if (_asset.getChildByName("image") != null) {
+			_asset.getChildByName("image").x = _currentImageRect.x;
+			_asset.getChildByName("image").y = _currentImageRect.y;
+			
+			_asset.getChildByName("image").width = _currentImageRect.width;
+			_asset.getChildByName("image").height = _currentImageRect.height;
+		}
 	}
 	
 	private function calcImagePos () {
@@ -64,8 +89,8 @@ class HxImage extends HxComponent {
 			_currentImageRect = new Rectangle(0, 0, 0, 0);
 			
 		if (!_parameters.exists("allowImageScaling") || (_parameters.exists("allowImageScaling") && _parameters.get("allowImageScaling") == "false")) {
-			_currentImageRect.width = _asset.getChildByName("image").width;
-			_currentImageRect.height = _asset.getChildByName("image").height;
+			_currentImageRect.width = _originalImageSize.x;
+			_currentImageRect.height = _originalImageSize.y;
 		}
 		else {
 			if (!_parameters.exists("keepImageAspectRatio") || (_parameters.exists("keepImageAspectRatio") && _parameters.get("keepImageAspectRatio") == "true")) {

@@ -92,7 +92,7 @@ class HxComponent extends Sprite {
 			else if (maxAnchor == 1)
 				newMinVal = maxVal - minLength;
 			else {
-				center = calcPointPosOnLine(maxCap, originalCap, originalPos + (minLength / 2), -1);
+				center = calcPointPosOnLine(maxCap, originalCap, originalPos + (originalLength / 2), -1);
 				newMinVal = center - (minLength / 2);
 				newMaxVal = center + (minLength / 2);
 			}

@@ -8,6 +8,9 @@ import nme.display.StageAlign;
 import com.studfarm.hxuikit.HxUiKit;
 import com.studfarm.hxuikit.components.HxButton;
 import layout.MainLayout;
+import nme.Assets;
+import nme.display.Bitmap;
+import com.studfarm.hxuikit.components.HxImage;
 
 class Main {	
 	
@@ -28,7 +31,10 @@ class Main {
 		_uikit.build();
 		_uikit.showLayout("MainLayout");
 		
-			
+		var test:Bitmap = new Bitmap(Assets.getBitmapData("assets/hxuikit/testimage.jpg"));
+		var testImage:HxImage = cast(HxUiKit.getComponentById("TestImage"), HxImage);
+		testImage.setImageAsset(test);
+		
 		HxUiKit.getComponentById("TeppoButton").addEventListener(HxButton.CLICK, testSomething);
 	}
 	
