@@ -56,10 +56,7 @@ class HxImage extends HxComponent {
 	
 	private function onImageLoadComplete (evt:Event) {
 		var asset:DisplayObject = _imageLoader.content;
-		asset.name = "image";
-		_asset.addChild(asset);
-		calcEssentials();
-		resize();
+		setImageAsset(asset);
 	}
 	
 	private function calcImagePos () {
